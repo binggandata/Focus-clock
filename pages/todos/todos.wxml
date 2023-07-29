@@ -11,11 +11,11 @@
       </view>
       <view class="weui-tab__panel">
         <view hidden="{{activeIndex != 0}}">
-          <sample_form id="my-form" rules="{{proFormData.rules}}" formData="{{proFormData.formData}}" options="{{proFormData.options}}"
+          <sample_form id="pro-form" rules="{{proFormData.rules}}" formData="{{proFormData.formData}}" options="{{proFormData.options}}"
             title="为你的测试输入合适的参数:">
           </sample_form>
           <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" bindtap="submitForm">提交计算</button>
+            <button class="weui-btn" type="primary" bindtap="submitForm_pro">提交计算</button>
           </view>
           <text>
             填写指引：
@@ -33,11 +33,11 @@
           
         </view>
         <view hidden="{{activeIndex != 1}}">
-          <sample_form id="my-form" rules="{{avgFormData.rules}}" formData="{{avgFormData.formData}}" options="{{avgFormData.options}}"
+          <sample_form id="avg-form" rules="{{avgFormData.rules}}" formData="{{avgFormData.formData}}" options="{{avgFormData.options}}"
             title="为你的测试输入合适的参数:">
           </sample_form>
           <view class="weui-btn-area">
-            <button class="weui-btn" type="primary" bindtap="submitForm">提交计算</button>
+            <button class="weui-btn" type="primary" bindtap="submitForm_avg">提交计算</button>
           </view>
           <text>
             填写指引：

@@ -36,7 +36,7 @@ Page({
         },
         {
           title: "置信水平",
-          key: "95%",
+          key: "4",
           type: "selector",
           rules: true,
           option: {
@@ -118,9 +118,17 @@ Page({
     });
   },
   // 提交表单 https://phpsdk.cn/plug/news/show.html?id=21065
-  submitForm() {
+  submitForm_pro() {
     // 获取组件对象
-    const myForm = this.selectComponent("#my-form");
+    const myForm = this.selectComponent("#pro-form");
+    // 调用验证方法
+    if (myForm.validate()) {
+      console.log(myForm.data.formData);
+    }
+  },
+  submitForm_avg() {
+    // 获取组件对象
+    const myForm = this.selectComponent("#avg-form");
     // 调用验证方法
     if (myForm.validate()) {
       console.log(myForm.data.formData);
