@@ -1,92 +1,5 @@
-var sliderWidth = 96; // 需要设置slider的宽度，用于计算中间位置
-
 Page({
   data: {
-    tabs: ["概率类指标", "均值类指标"],
-    activeIndex: 1,
-    sliderOffset: 0,
-    sliderLeft: 0,
-
-    proFormData: {
-      title: "概率类",
-      formData: {
-        1: "",
-        2: "",
-        3: "",
-        4: ""
-      },
-      options: [
-        {
-          title: "原始指标",
-          key: "1",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "最小可检测相对提升",
-          key: "2",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "分组总数",
-          key: "3",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "置信水平",
-          key: "4",
-          type: "selector",
-          rules: true,
-          option: {
-            data: ["80%", "85%", "90%","95%"]
-          }
-        },
-      ],
-      rules: []
-    },
-
-    avgFormData: {
-      title: "均值类",
-      formData: {
-        1: "",
-        2: "",
-        3: "",
-        4: ""
-      },
-      options: [
-        {
-          title: "标准差",
-          key: "1",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "最小可检测绝对提升",
-          key: "2",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "分组总数",
-          key: "3",
-          type: "number",
-          rules: true
-        },
-        {
-          title: "置信水平",
-          key: "95%",
-          type: "selector",
-          rules: true,
-          option: {
-            data: ["80%", "85%", "90%","95%"]
-          }
-        },
-      ],
-      rules: []
-    },
-
     input: '',
     todos: [],
     leftCount: 0,
@@ -94,44 +7,153 @@ Page({
     logs: [],
     toastHidden: true,
   },
-  onLoad: function() {
-    var that = this;
-    wx.getSystemInfo({
-      success: function(res) {
-        that.setData({
-          sliderLeft: (res.windowWidth / that.data.tabs.length - sliderWidth) / 2,
-          sliderOffset: res.windowWidth / that.data.tabs.length *that.data.activeIndex
-        });
-      }
-    });
-  },
   onShow: function() {
     wx.setNavigationBarTitle({
-      title: 'A/B测试样本量计算器'
+      title: '待办清单'
     })
 
   },
-  tabClick: function(e) {
+
+  save: function () {
+    wx.setStorageSync('todo_list', this.data.todos)
+    wx.setStorageSync('todo_logs', this.data.logs)
+  },
+
+  load: function () {
+    var todos = wx.getStorageSync('todo_list')
+    if (todos) {
+      var leftCount = todos.filter(function (item) {
+        return !item.completed
+      }).length
+      this.setData({ todos: todos, leftCount: leftCount })
+    }
+    var logs = wx.getStorageSync('todo_logs')
+    if (logs) {
+      this.setData({ logs: logs })
+    }
+  },
+
+  onLoad: function () {
+    this.load()
+  },
+
+  inputChangeHandle: function (e) {
+    this.setData({ input: e.detail.value })
+  },
+
+  addTodoHandle: function (e) {
+    if (!this.data.input || !this.data.input.trim()) return
+    var todos = this.data.todos
+    todos.push({ name: this.data.input, completed: false })
+    var logs = this.data.logs
+    logs.push({ timestamp: new Date(), action: 'Add', name: this.data.input })
     this.setData({
-      sliderOffset: e.currentTarget.offsetLeft,
-      activeIndex: e.currentTarget.id
-    });
+      input: '',
+      todos: todos,
+      leftCount: this.data.leftCount + 1,
+      logs: logs
+    })
+    this.save()
   },
-  // 提交表单 https://phpsdk.cn/plug/news/show.html?id=21065
-  submitForm_pro() {
-    // 获取组件对象
-    const myForm = this.selectComponent("#pro-form");
-    // 调用验证方法
-    if (myForm.validate()) {
-      console.log(myForm.data.formData);
+
+  toggleTodoHandle: function (e) {
+    var index = e.currentTarget.dataset.index
+    var todos = this.data.todos
+    todos[index].completed = !todos[index].completed
+    var logs = this.data.logs
+    logs.push({
+      timestamp: new Date(),
+      action: todos[index].completed ? 'Finish' : 'Restart',
+      name: todos[index].name
+    })
+    this.setData({
+      todos: todos,
+      leftCount: this.data.leftCount + (todos[index].completed ? -1 : 1),
+      logs: logs
+    })
+    this.save()
+
+  },
+
+  removeTodoHandle: function (e) {
+    var index = e.currentTarget.dataset.index
+    var todos = this.data.todos
+    var remove = todos.splice(index, 1)[0]
+    var logs = this.data.logs
+    logs.push({ timestamp: new Date(), action: 'Remove', name: remove.name })
+    this.setData({
+      todos: todos,
+      leftCount: this.data.leftCount - (remove.completed ? 0 : 1),
+      logs: logs
+    })
+    this.save()
+  },
+
+  toggleAllHandle: function (e) {
+    this.data.allCompleted = !this.data.allCompleted
+    var todos = this.data.todos
+    for (var i = todos.length - 1; i >= 0; i--) {
+      todos[i].completed = this.data.allCompleted
+    }
+    var logs = this.data.logs
+    logs.push({
+      timestamp: new Date(),
+      action: this.data.allCompleted ? 'Finish' : 'Restart',
+      name: 'All todos'
+    })
+    this.setData({
+      todos: todos,
+      leftCount: this.data.allCompleted ? 0 : todos.length,
+      logs: logs
+    })
+    this.save()
+    wx.vibrateShort()
+  },
+  
+  clearCompletedHandle: function (e) {
+    var todos = this.data.todos
+    var remains = []
+    for (var i = 0; i < todos.length; i++) {
+      todos[i].completed || remains.push(todos[i])
+    }
+    var logs = this.data.logs
+    logs.push({
+      timestamp: new Date(),
+      action: 'Clear',
+      name: 'Completed todo'
+    })
+    this.setData({ todos: remains, logs: logs })
+    this.save()
+    this.setData({
+      toastHidden: false
+    })
+  wx.vibrateShort()
+  },
+  hideToast: function() {
+    this.setData({
+      toastHidden: true
+    })
+  },
+  onShareAppMessage: function (res) {
+
+    if (res.from ==='button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+      return {
+        title:'管理时间，保持专注！让自律成为习惯！',
+         path: '/pages/index/index',
+        imageUrl:'/image/share.jpg' //不设置则默认为当前页面的截图
+      }
     }
   },
-  submitForm_avg() {
-    // 获取组件对象
-    const myForm = this.selectComponent("#avg-form");
-    // 调用验证方法
-    if (myForm.validate()) {
-      console.log(myForm.data.formData);
-    }
-  }
+    onShareTimeline: function (res){
+        return{  
+          title: '管理时间，保持专注，让自律成为习惯！',
+          query: {   
+            // key: 'value' //要携带的参数 
+          },  
+          imageUrl: '/image/about.png'   
+        }    
+      }
+   
 })

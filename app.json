@@ -11,8 +11,12 @@
     "pages/about/about",
     "pages/more/more",
     "pages/todos/todos",
+    "pages/absample/absample",
     "pages/poster/poster",
-    "pages/version/version"
+    "pages/version/version",
+    "pages/zhihu/zhihu",
+    "pages/zhihu/question/question",
+    "pages/zhihu/answer/answer"
   ],
   "navigateToMiniProgramAppIdList": [
     "wxe333b834a643f99d",
@@ -24,7 +28,8 @@
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#EDEDED",
     "navigationBarTitleText": "",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh":true
    }, 
   "tabBar": {
     "color": "#cdcdcd",
@@ -38,19 +43,26 @@
         "selectedIconPath": "image/yu2.png",
         "text": "专注"
       },
+      {
+        "pagePath": "pages/zhihu/zhihu",
+        "iconPath": "image/jilu.png",
+        "selectedIconPath": "image/jilu2.png",
+        "text": "知乎"
+      },
 
       {
         "pagePath": "pages/todos/todos",
         "iconPath": "image/todo2.png",
         "selectedIconPath": "image/todo.png",
         "text": "待办"
-      },      
+      }, 
       {
-        "pagePath": "pages/logs/logs",
-        "iconPath": "image/jilu.png",
-        "selectedIconPath": "image/jilu2.png",
-        "text": "记录"
-      },
+        "pagePath": "pages/absample/absample",
+        "iconPath": "image/todo2.png",
+        "selectedIconPath": "image/todo.png",
+        "text": "样本"
+      },          
+      
       {
         "pagePath": "pages/setting/setting",
         "iconPath": "image/shezhi.png",
@@ -59,5 +71,10 @@
       }
     ]
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "networkTimeout": {
+    "request": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true
 }

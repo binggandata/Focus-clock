@@ -1,0 +1,62 @@
+<view class="todo_container">
+  <view class="page__bd">
+    <view class="weui-tab">
+      <view class="weui-navbar contentCss">
+        <block wx:for="{{tabs}}"wx:key="*this">
+          <view id="{{index}}"class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+            <view class="weui-navbar__title">{{item}}</view>
+          </view>
+        </block>
+        <view class="weui-navbar__slider" style="left: {{sliderLeft}}px; transform: translateX({{sliderOffset}}px); -webkit-transform: translateX({{sliderOffset}}px);"></view>
+      </view>
+      <view class="weui-tab__panel">
+        <view hidden="{{activeIndex != 0}}">
+          <sample_form id="pro-form" rules="{{proFormData.rules}}" formData="{{proFormData.formData}}" options="{{proFormData.options}}"
+            title="为你的测试输入合适的参数:">
+          </sample_form>
+          <view class="weui-btn-area">
+            <button class="weui-btn" type="primary" bindtap="submitForm_pro">提交计算</button>
+          </view>
+          <text>
+            填写指引：
+            1. 原始指标：一般是对照组的指标（比如转化率，点击率等概率类指标），也就是没有变化时的指标，从历史数据中分析计算得出。例如：如果原始指标为5%, 输入5。
+            2. 最小可检测相对提升: 最小可检测相对提升指的是通过A/B测试可以检测到指标最小的相对提升,如果最小可检测相对提升为10%，输入10
+                例如：如果原始指标为5%，只有当实验组指标提升到6%时你才决定是实施A/B测试中的改变，那么此时的最小可检测相对提升就是20% ((6% - 5%) / 5%)。
+                最小可检测相对提升越高，需要的样本量就越小。
+                如果实验组指标为 5.5 % 或更高的话， 我们才可以观测到统计显著性结果。
+            3. 分组总数：输入A/B测试中的分组总数, 包括对照组。
+                例如：如果A/B测试有1个对照组和1个实验组，输入2。（假设每组样本量相等）
+            4. 置信水平：置信水平为1-α，例如：当α=5%时，置信水平=95%
+                推荐的置信水平: 95%.
+                置信水平越高，需要的样本量也越大。
+          </text>
+          
+        </view>
+        <view hidden="{{activeIndex != 1}}">
+          <sample_form id="avg-form" rules="{{avgFormData.rules}}" formData="{{avgFormData.formData}}" options="{{avgFormData.options}}"
+            title="为你的测试输入合适的参数:">
+          </sample_form>
+          <view class="weui-btn-area">
+            <button class="weui-btn" type="primary" bindtap="submitForm_avg">提交计算</button>
+          </view>
+          <text>
+            填写指引：
+            1. 标准差：指标的标准差，从历史数据中分析计算得出。
+            2. 最小可检测绝对提升: 
+                指的是通过A/B测试可以检测到指标最小的绝对提升
+                例如：如果对照组的指标均值为2，只有当实验组指标均值提升到2.5，那么此时最小可检测相对提升就为0.5（2.5-2）.
+                最小可检测绝对提升越高，需要的样本量就越小。
+                如果两组指标的绝对差值为 0.5 或者更大的话, 我们才可以观测到统计显著性结果。
+            3. 分组总数：输入A/B测试中的分组总数, 包括对照组。
+                例如：如果A/B测试有1个对照组和1个实验组，输入2。（假设每组样本量相等）
+            4. 置信水平：置信水平为1-α，例如：当α=5%时，置信水平=95%
+                推荐的置信水平: 95%.
+                置信水平越高，需要的样本量也越大。
+          </text>
+        </view>
+
+      </view>
+    </view>
+  </view>
+</view>
+ 
