@@ -1,0 +1,173 @@
+<!--components/Form/index.wxml-->
+
+<view>
+  <mp-form id="form" rules="{{rules}}" models="{{formData}}">
+    <mp-cells title="{{title}}">
+      <mp-cell
+        prop="{{item.key}}"
+        title="{{item.title}}"
+        wx:for="{{options}}"
+        wx:key="index"
+      >
+        <view wx:if="{{item.slot}}">
+          <slot name="{{item.key}}"></slot>
+        </view>
+        <view wx:else>
+          <input
+            type="text"
+            wx:if="{{item.type === 'text'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindinput="formInputChange"
+            data-field="{{item.key}}"
+            class="weui-input"
+            placeholder="请输入{{item.title}}"
+          />
+          <textarea
+            wx:if="{{item.type === 'textarea'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindblur="formInputChange"
+            data-field="{{item.key}}"
+            auto-height
+            placeholder="请输入{{item.title}}"
+          />
+          <input
+            type="number"
+            wx:if="{{item.type === 'number'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindinput="formInputChange"
+            data-field="{{item.key}}"
+            class="weui-input"
+            placeholder="请输入{{item.title}}"
+          >
+          </input>
+          <input
+            type="idcard"
+            wx:if="{{item.type === 'idcard'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindinput="formInputChange"
+            data-field="{{item.key}}"
+            class="weui-input"
+            placeholder="请输入{{item.title}}"
+          />
+          <input
+            type="digit"
+            wx:if="{{item.type === 'digit'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindinput="formInputChange"
+            data-field="{{item.key}}"
+            class="weui-input"
+            placeholder="请输入{{item.title}}"
+          />
+          <input
+            type="text"
+            password
+            wx:if="{{item.type === 'password'}}"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindinput="formInputChange"
+            data-field="{{item.key}}"
+            class="weui-input"
+            placeholder="请输入{{item.title}}"
+          />
+          <switch
+            bindchange="formInputChange"
+            checked="{{formData[item.key]}}"
+            data-field="{{item.key}}"
+            wx:if="{{item.type === 'switch'}}"
+            disabled="{{item.disabled}}"
+          />
+          <picker
+            data-field="{{item.key}}"
+            wx:if="{{item.type === 'date'}}"
+            disabled="{{item.disabled}}"
+            mode="date"
+            value="{{formData[item.key]}}"
+            bindchange="formInputChange"
+          >
+            <view
+              class="weui-input"
+              style="color: #808080;"
+              wx:if="{{!formData[item.key]}}"
+            >请选择{{ item.title }}</view
+            >
+            <view class="weui-input" wx:else>{{ formData[item.key] }}</view>
+          </picker>
+          <picker
+            data-field="{{item.key}}"
+            wx:if="{{item.type === 'time'}}"
+            mode="time"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindchange="formInputChange"
+            placeholder="请选择{{item.title}}"
+          >
+            <view
+              class="weui-input"
+              style="color: #808080;"
+              wx:if="{{!formData[item.key]}}"
+            >请选择{{ item.title }}</view
+            >
+            <view class="weui-input" wx:else>{{ formData[item.key] }}</view>
+          </picker>
+          <picker
+            data-field="{{item.key}}"
+            wx:if="{{item.type === 'region'}}"
+            mode="region"
+            disabled="{{item.disabled}}"
+            value="{{formData[item.key]}}"
+            bindchange="formInputChange"
+          >
+            <view
+              class="weui-input"
+              style="color: #808080;"
+              wx:if="{{!formData[item.key]}}"
+            >请选择{{ item.title }}</view
+            >
+            <view class="weui-input" wx:else>{{ formData[item.key] }}</view>
+          </picker>
+          <picker
+            data-field="{{item.key}}"
+            wx:if="{{item.type === 'selector'}}"
+            mode="selector"
+            disabled="{{item.disabled}}"
+            range="{{item.option.data}}"
+            range-key="{{item.option.props.key}}"
+            value="{{formData[item.key]}}"
+            bindchange="formInputChange"
+          >
+            <view
+              class="weui-input"
+              style="color: #808080;"
+              wx:if="{{!formData[item.key]}}"
+            >请选择{{ item.title }}</view
+            >
+            <view class="weui-input" wx:elif="{{item.option.props.key}}">
+              {{
+                item.option.data[formData[item.key]][item.option.props.key]
+              }}</view
+            >
+            <view class="weui-input" wx:else>{{
+              item.option.data[formData[item.key]]
+            }}</view>
+          </picker>
+          <mp-uploader
+            bindtap="formFileChange"
+            bindsuccess="uploadSuccess"
+            upload="{{uplaodFile}}"
+            files="{{formData[item.key]}}"
+            title=""
+            wx:if="{{item.type === 'file'}}"
+            data-field="{{item.key}}"
+            class="weui-input"
+          >
+          </mp-uploader>
+        </view>
+      </mp-cell>
+    </mp-cells>
+  </mp-form>
+</view>

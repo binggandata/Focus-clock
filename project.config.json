@@ -37,28 +37,23 @@
         "disableUseStrict": false,
         "minifyWXML": true,
         "showES6CompileOption": false,
-        "useCompilerPlugins": false
+        "useCompilerPlugins": false,
+        "condition": false
     },
     "compileType": "miniprogram",
     "libVersion": "2.21.3",
-    "appid": "wx3bff51ba6deab54d",
+    "appid": "wxc9d89340602edce0",
     "projectname": "github-focus",
     "simulatorType": "wechat",
     "simulatorPluginLibVersion": {},
-    "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-    "condition": {
-        "search": {
-            "list": []
-        },
-        "conversation": {
-            "list": []
-        },
-        "game": {
-            "currentL": -1,
-            "list": []
-        },
-        "miniprogram": {
-            "list": []
-        }
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
+    "condition": {},
+    "packOptions": {
+        "ignore": [],
+        "include": []
+    },
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
     }
 }
